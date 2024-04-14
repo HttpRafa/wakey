@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wakey/screens/devices.dart';
+import 'package:wakey/screen/home.dart';
 
 class WakeyApp extends StatelessWidget {
   const WakeyApp({super.key});
@@ -9,11 +9,11 @@ class WakeyApp extends StatelessWidget {
     return MaterialApp(
       title: "Wakey",
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 114, 137, 218), brightness: Brightness.dark),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue, brightness: Brightness.dark),
         brightness: Brightness.dark,
         useMaterial3: true
       ),
-      home: const DevicesScreen(),
+      home: const HomeScreen(),
     );
   }
 
