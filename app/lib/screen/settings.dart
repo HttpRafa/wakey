@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../widget/app_bar.dart';
+import 'package:wakey/storage/app_storage.dart';
+import 'package:wakey/widget/app_bar.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -15,6 +15,11 @@ class SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: generateStandardAppBar(context, "Settings"),
+      floatingActionButton: FloatingActionButton.extended(onPressed: () {
+        AppStorage.writeLocations([]);
+        AppStorage.writeEndpoints([]);
+      }, label: const Text("Clear data")),
+      body: Text(AppStorage.pullLocations().length.toString()),
     );
   }
 

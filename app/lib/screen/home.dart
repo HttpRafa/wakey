@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wakey/screen/locations.dart';
 import 'package:wakey/screen/settings.dart';
 
-import 'devices.dart';
+import 'endpoints.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,13 +26,13 @@ class HomeScreenState extends State<HomeScreen> {
         },
         selectedIndex: currentPageIndex,
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.device_hub), label: "Devices"),
+          NavigationDestination(icon: Icon(Icons.device_hub), label: "Endpoints"),
           NavigationDestination(icon: Icon(Icons.location_on), label: "Locations"),
           NavigationDestination(icon: Icon(Icons.settings), label: "Settings")
         ],
       ),
       body: [
-        const DevicesScreen(),
+        const EndpointScreen(),
         const LocationsScreen(),
         const SettingsScreen()
       ][currentPageIndex],

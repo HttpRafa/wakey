@@ -1,27 +1,27 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wakey/device/location.dart';
 
-import '../device/device.dart';
+import '../endpoint/endpoint.dart';
+import '../endpoint/location.dart';
 
 class AppStorage {
 
-  static const _keyDevices = "devices";
+  static const _keyEndpoints = "endpoints";
   static const _keyLocations = "locations";
 
   static late SharedPreferences _preferences;
 
   static Future init() async => _preferences = await SharedPreferences.getInstance();
 
-  static Future writeDevices(List<Device> devices) async => await _preferences.setString(_keyDevices, jsonEncode(devices));
+  static Future writeEndpoints(List<Endpoint> endpoints) async => await _preferences.setString(_keyEndpoints, jsonEncode(endpoints));
   static Future writeLocations(List<Location> locations) async => await _preferences.setString(_keyLocations, jsonEncode(locations));
 
-  static List<Device> pullDevices() {
-    final data = _preferences.getString(_keyDevices);
+  static List<Endpoint> pullEndpoints() {
+    final data = _preferences.getString(_keyEndpoints);
     if(data != null) {
-      List<dynamic> devices = jsonDecode(data);
-      return List<Device>.from(devices.map((e) => Device.fromJson(e)));
+      List<dynamic> endpoints = jsonDecode(data);
+      return List<Endpoint>.from(endpoints.map((e) => Endpoint.fromJson(e)));
     }
     return [];
   }

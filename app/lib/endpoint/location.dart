@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 
 class Location {
 
-  UniqueKey key;
+  String key;
   String name;
   String address;
   String token;
