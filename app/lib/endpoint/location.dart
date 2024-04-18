@@ -1,17 +1,16 @@
-
 class Location {
 
-  String key;
+  String identifier;
   String name;
   String address;
   String token;
 
-  Location(this.key, this.name, this.address, this.token);
+  Location(this.identifier, this.name, this.address, this.token);
 
-  factory Location.fromJson(Map<String, dynamic> json) => Location(json["key"], json["name"], json["address"], json["token"]);
+  factory Location.fromJson(Map<String, dynamic> json) => Location(json["identifier"], json["name"], json["address"], json["token"]);
 
   Map<String, dynamic> toJson() => {
-    "key": key,
+    "identifier": identifier,
     "name": name,
     "address": address,
     "token": token

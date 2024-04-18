@@ -1,14 +1,16 @@
+import 'package:wakey/endpoint/location.dart';
+
 class Endpoint {
 
-  String locationKey;
+  Location location;
   String name;
 
-  Endpoint(this.locationKey, this.name);
+  Endpoint(this.location, this.name);
 
-  factory Endpoint.fromJson(Map<String, dynamic> json) => Endpoint(json["locationKey"], json["name"]);
+  factory Endpoint.fromJson(Map<String, dynamic> json) => Endpoint(Location.fromJson(json["location"]), json["name"]);
 
   Map<String, dynamic> toJson() => {
-    "locationKey": locationKey,
+    "location": location.toJson(),
     "name": name
   };
 

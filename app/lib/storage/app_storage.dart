@@ -8,7 +8,7 @@ import '../endpoint/location.dart';
 class AppStorage {
 
   static const _keyEndpoints = "endpoints";
-  static const _keyLocations = "locations";
+  static const _keyLocations = "list";
 
   static late SharedPreferences _preferences;
 

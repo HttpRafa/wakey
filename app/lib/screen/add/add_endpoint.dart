@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wakey/endpoint/endpoint.dart';
 import 'package:wakey/endpoint/location.dart';
+import 'package:wakey/screen/add/endpoint/add_http_request.dart';
+import 'package:wakey/screen/add/endpoint/add_wake_over_lan.dart';
 import 'package:wakey/storage/app_storage.dart';
 import 'package:wakey/widget/app_bar.dart';
 
@@ -22,6 +24,8 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
   final List<Location> locations = AppStorage.pullLocations();
   late Location currentLocation = AppStorage.pullLocations().first;
 
+  int selectedType = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,12 +37,18 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
           children: [
             const Padding(padding: EdgeInsets.only(top: 25),
                 child: Text("Location information")),
-            Padding(padding: const EdgeInsets.only(top: 5), child: DropdownButton(
-              hint: const Text('Please choose a location'), // Not necessary for Option 1
+            Padding(
+                padding: const EdgeInsets.only(top: 5), child: DropdownButton(
+              hint: const Text('Please choose a location'),
+              // Not necessary for Option 1
               value: currentLocation.name,
-              onChanged: (value) => setState(() {
-                currentLocation = locations.firstWhere((element) => element.name == value);
-              }),
+              onChanged: (value) =>
+                  setState(() {
+                    currentLocation =
+                        locations.firstWhere((element) =>
+                        element.name ==
+                            value);
+                  }),
               items: locations.map((location) {
                 return DropdownMenuItem(
                   value: location.name,
@@ -47,13 +57,35 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
               }).toList(),
             )),
             const Padding(padding: EdgeInsets.only(top: 25),
-                child: Text("Endpoint information")),
+                child: Text("General endpoint information")),
+            Padding(padding: const EdgeInsets.only(top: 5),
+                child: Wrap(
+                  spacing: 5.0,
+                  children: [
+                    ChoiceChip(label: const Text("Wake-over-LAN"),
+                        selected: selectedType == 0,
+                        onSelected: (value) =>
+                            setState(() {
+                              selectedType = 0;
+                            })),
+                    ChoiceChip(label: const Text("HTTP-Request"),
+                        selected: selectedType == 1,
+                        onSelected: (value) =>
+                            setState(() {
+                              selectedType = 1;
+                            })),
+                  ],
+                )),
             Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
               decoration: const InputDecoration(hintText: "Name"),
               controller: nameController,
             )),
+            const Padding(padding: EdgeInsets.only(top: 25),
+                child: Text("Endpoint information")),
+            if(selectedType == 0) const AddWakeOverLan() else const AddHttpRequest(),
             Padding(padding: const EdgeInsets.only(top: 10),
-                child: TextButton(onPressed: _addEndpoint, child: const Text("Add endpoint")))
+                child: TextButton(
+                    onPressed: _addEndpoint, child: const Text("Add endpoint")))
           ],
         ),
       ),
@@ -68,7 +100,7 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
       return;
     }
     if (!widget.endpoints.any((element) => element.name == nameController.text)) {
-      Endpoint endpoint = Endpoint(currentLocation.key, nameController.text);
+      Endpoint endpoint = Endpoint(currentLocation, nameController.text);
       // TODO: Validate that location is correct
       widget.callback(endpoint);
 

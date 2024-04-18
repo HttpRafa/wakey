@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wakey/endpoint/location.dart';
 import 'package:wakey/widget/app_bar.dart';
 
@@ -55,9 +56,7 @@ class AddLocationScreen extends StatelessWidget {
       return;
     }
     if (!locations.any((element) => element.name == nameController.text)) {
-      Location location = Location(
-          UniqueKey().toString(), nameController.text,
-          addressController.text, tokenController.text);
+      Location location = Location(const Uuid().v4(), nameController.text, addressController.text, tokenController.text);
       // TODO: Validate that location is correct
       callback(location);
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wakey/screen/add/add_endpoint.dart';
+import 'package:wakey/widget/list/endpoint_list_item.dart';
 
 import '../dialog/error_dialog.dart';
 import '../endpoint/endpoint.dart';
@@ -28,17 +29,9 @@ class EndpointScreenState extends State<EndpointScreen> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           children: [
             for(int i = 0; i < endpoints.length; i++)
-              ListTile(
-                leading: const ExcludeSemantics(
-                  child: CircleAvatar(
-                    child: Icon(Icons.devices),
-                  ),
-                ),
-                title: Text(
-                    endpoints[i].name
-                ),
-                subtitle: Text(endpoints[i].locationKey),
-              )
+              EndpointTile(endpoints[i], () {
+                // If edit button is pressed
+              })
           ],
         ),
       ),

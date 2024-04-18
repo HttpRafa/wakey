@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wakey/endpoint/location.dart';
 import 'package:wakey/screen/add/add_location.dart';
 import 'package:wakey/storage/app_storage.dart';
-
-import '../endpoint/location.dart';
-import '../widget/app_bar.dart';
+import 'package:wakey/widget/app_bar.dart';
+import 'package:wakey/widget/list/location_list_item.dart';
 
 class LocationsScreen extends StatefulWidget {
   const LocationsScreen({super.key});
@@ -27,17 +27,9 @@ class LocationsScreenState extends State<LocationsScreen> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           children: [
             for(int i = 0; i < locations.length; i++)
-              ListTile(
-                leading: const ExcludeSemantics(
-                  child: CircleAvatar(
-                    child: Icon(Icons.location_on),
-                  ),
-                ),
-                title: Text(
-                    locations[i].name
-                ),
-                subtitle: Text(locations[i].address),
-              )
+              LocationTile(locations[i], () {
+                // If edit button is pressed
+              })
           ],
         ),
       ),
