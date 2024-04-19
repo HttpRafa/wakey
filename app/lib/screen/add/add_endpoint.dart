@@ -3,7 +3,9 @@ import 'package:wakey/endpoint/endpoint.dart';
 import 'package:wakey/endpoint/location.dart';
 import 'package:wakey/screen/add/endpoint/add_http_request.dart';
 import 'package:wakey/screen/add/endpoint/add_wake_over_lan.dart';
+import 'package:wakey/widget/add/endpoint/location_drop_down.dart';
 import 'package:wakey/storage/app_storage.dart';
+import 'package:wakey/widget/add/endpoint/type_choice_chips.dart';
 import 'package:wakey/widget/app_bar.dart';
 
 class AddEndpointScreen extends StatefulWidget {
@@ -15,16 +17,27 @@ class AddEndpointScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => AddEndpointScreenState();
+
 }
 
 class AddEndpointScreenState extends State<AddEndpointScreen> {
 
+  static const int wakeOverLan = 0;
+  static const int httpRequest = 1;
+
   static final nameController = TextEditingController();
+
+  // Wake-over-LAN
+  static final addressController = TextEditingController();
+  static final macAddressController = TextEditingController();
+
+  // HTTP-Request
+  static final httpEndpointController = TextEditingController();
 
   final List<Location> locations = AppStorage.pullLocations();
   late Location currentLocation = AppStorage.pullLocations().first;
 
-  int selectedType = 0;
+  EndpointType selectedType = EndpointType.wakeOverLan;
 
   @override
   Widget build(BuildContext context) {
@@ -37,52 +50,31 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
           children: [
             const Padding(padding: EdgeInsets.only(top: 25),
                 child: Text("Location information")),
+
+            // Location info
             Padding(
-                padding: const EdgeInsets.only(top: 5), child: DropdownButton(
-              hint: const Text('Please choose a location'),
-              // Not necessary for Option 1
-              value: currentLocation.name,
-              onChanged: (value) =>
-                  setState(() {
-                    currentLocation =
-                        locations.firstWhere((element) =>
-                        element.name ==
-                            value);
-                  }),
-              items: locations.map((location) {
-                return DropdownMenuItem(
-                  value: location.name,
-                  child: Text(location.name),
-                );
-              }).toList(),
-            )),
+                padding: const EdgeInsets.only(top: 5),
+                child: LocationDropDown(
+                    locations, currentLocation, (p0) => currentLocation = p0)),
+
             const Padding(padding: EdgeInsets.only(top: 25),
                 child: Text("General endpoint information")),
+
+            // General Endpoint info
             Padding(padding: const EdgeInsets.only(top: 5),
-                child: Wrap(
-                  spacing: 5.0,
-                  children: [
-                    ChoiceChip(label: const Text("Wake-over-LAN"),
-                        selected: selectedType == 0,
-                        onSelected: (value) =>
-                            setState(() {
-                              selectedType = 0;
-                            })),
-                    ChoiceChip(label: const Text("HTTP-Request"),
-                        selected: selectedType == 1,
-                        onSelected: (value) =>
-                            setState(() {
-                              selectedType = 1;
-                            })),
-                  ],
-                )),
+                child: TypeChoiceChips(selectedType, (p0) => setState(() => selectedType = p0))),
             Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
               decoration: const InputDecoration(hintText: "Name"),
               controller: nameController,
             )),
+
             const Padding(padding: EdgeInsets.only(top: 25),
                 child: Text("Endpoint information")),
-            if(selectedType == 0) const AddWakeOverLan() else const AddHttpRequest(),
+
+            // Endpoint info
+            if(selectedType == EndpointType.wakeOverLan) AddWakeOverLan(addressController, macAddressController) else
+              AddHttpRequest(httpEndpointController),
+
             Padding(padding: const EdgeInsets.only(top: 10),
                 child: TextButton(
                     onPressed: _addEndpoint, child: const Text("Add endpoint")))
@@ -100,7 +92,7 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
       return;
     }
     if (!widget.endpoints.any((element) => element.name == nameController.text)) {
-      Endpoint endpoint = Endpoint(currentLocation, nameController.text);
+      Endpoint endpoint = Endpoint(currentLocation, nameController.text, selectedType);
       // TODO: Validate that location is correct
       widget.callback(endpoint);
 
