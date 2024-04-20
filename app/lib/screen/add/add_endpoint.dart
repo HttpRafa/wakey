@@ -43,42 +43,44 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: generateStandardAppBar(context, "Add endpoint"),
-      body: Padding(
-        padding: const EdgeInsets.only(right: 25, left: 25, top: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(padding: EdgeInsets.only(top: 25),
-                child: Text("Location information")),
+      body: Scrollbar(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 25, left: 25, top: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(padding: EdgeInsets.only(top: 25),
+                  child: Text("Location information")),
 
-            // Location info
-            Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: LocationDropDown(
-                    locations, currentLocation, (p0) => currentLocation = p0)),
+              // Location info
+              Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: LocationDropDown(
+                      locations, currentLocation, (p0) => currentLocation = p0)),
 
-            const Padding(padding: EdgeInsets.only(top: 25),
-                child: Text("General endpoint information")),
+              const Padding(padding: EdgeInsets.only(top: 25),
+                  child: Text("General endpoint information")),
 
-            // General Endpoint info
-            Padding(padding: const EdgeInsets.only(top: 5),
-                child: TypeChoiceChips(selectedType, (p0) => setState(() => selectedType = p0))),
-            Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
-              decoration: const InputDecoration(hintText: "Name"),
-              controller: nameController,
-            )),
+              // General Endpoint info
+              Padding(padding: const EdgeInsets.only(top: 5),
+                  child: TypeChoiceChips(selectedType, (p0) => setState(() => selectedType = p0))),
+              Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
+                decoration: const InputDecoration(hintText: "Name"),
+                controller: nameController,
+              )),
 
-            const Padding(padding: EdgeInsets.only(top: 25),
-                child: Text("Endpoint information")),
+              const Padding(padding: EdgeInsets.only(top: 25),
+                  child: Text("Endpoint information")),
 
-            // Endpoint info
-            if(selectedType == EndpointType.wakeOverLan) AddWakeOverLan(addressController, macAddressController) else
-              AddHttpRequest(httpEndpointController),
+              // Endpoint info
+              if(selectedType == EndpointType.wakeOverLan) AddWakeOverLan(addressController, macAddressController) else
+                AddHttpRequest(httpEndpointController),
 
-            Padding(padding: const EdgeInsets.only(top: 10),
-                child: TextButton(
-                    onPressed: _addEndpoint, child: const Text("Add endpoint")))
-          ],
+              Padding(padding: const EdgeInsets.only(top: 10),
+                  child: TextButton(
+                      onPressed: _addEndpoint, child: const Text("Add endpoint")))
+            ],
+          ),
         ),
       ),
     );
@@ -100,6 +102,11 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
 
       // Clear input fields
       nameController.clear();
+
+      addressController.clear();
+      macAddressController.clear();
+
+      httpEndpointController.clear();
       return;
     }
 

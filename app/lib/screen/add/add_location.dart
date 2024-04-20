@@ -18,31 +18,33 @@ class AddLocationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: generateStandardAppBar(context, "Add location"),
-      body: Padding(
-        padding: const EdgeInsets.only(right: 25, left: 25, top: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(padding: EdgeInsets.only(top: 25),
-                child: Text("Location information")),
-            Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
-              decoration: const InputDecoration(hintText: "Name"),
-              controller: nameController,
-            )),
-            const Padding(padding: EdgeInsets.only(top: 25),
-                child: Text("Server information")),
-            Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
-              decoration: const InputDecoration(hintText: "Address"),
-              controller: addressController,
-            )),
-            Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
-              decoration: const InputDecoration(hintText: "Token"),
-              controller: tokenController,
-              obscureText: true,
-            )),
-            Padding(padding: const EdgeInsets.only(top: 10),
-                child: TextButton(onPressed: () => _addLocation(context), child: const Text("Add location")))
-          ],
+      body: Scrollbar(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 25, left: 25, top: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(padding: EdgeInsets.only(top: 25),
+                  child: Text("Location information")),
+              Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
+                decoration: const InputDecoration(hintText: "Name"),
+                controller: nameController,
+              )),
+              const Padding(padding: EdgeInsets.only(top: 25),
+                  child: Text("Server information")),
+              Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
+                decoration: const InputDecoration(hintText: "Address"),
+                controller: addressController,
+              )),
+              Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
+                decoration: const InputDecoration(hintText: "Token"),
+                controller: tokenController,
+                obscureText: true,
+              )),
+              Padding(padding: const EdgeInsets.only(top: 10),
+                  child: TextButton(onPressed: () => _addLocation(context), child: const Text("Add location")))
+            ],
+          ),
         ),
       ),
     );
