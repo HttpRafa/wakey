@@ -5,19 +5,18 @@ import 'package:wakey/screen/info/endpoint_info.dart';
 import 'package:wakey/storage/app_storage.dart';
 import 'package:wakey/widget/app_bar.dart';
 
-class AddEndpointScreen extends StatefulWidget {
+class EditEndpointScreen extends StatefulWidget {
 
-  final List<Endpoint> endpoints;
-  final Function(Endpoint) callback;
+  final Endpoint endpoint;
+  final Function() saveCallback;
 
-  const AddEndpointScreen(this.endpoints, this.callback, {super.key});
+  const EditEndpointScreen(this.endpoint, this.saveCallback, {super.key});
 
   @override
-  State<StatefulWidget> createState() => AddEndpointScreenState();
-
+  State<StatefulWidget> createState() => EditEndpointScreenState();
 }
 
-class AddEndpointScreenState extends State<AddEndpointScreen> {
+class EditEndpointScreenState extends State<EditEndpointScreen> {
 
   static final nameController = TextEditingController();
 
@@ -35,8 +34,9 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Set controllers to right values
     return Scaffold(
-      appBar: generateStandardAppBar(context, "Add info"),
+      appBar: generateStandardAppBar(context, "Edit info"),
       body: Scrollbar(
         child: Padding(
           padding: const EdgeInsets.only(right: 25, left: 25, top: 10),
@@ -45,8 +45,7 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
             children: [
               EndpointInfo(locations, currentLocation, currentEndpointType, nameController, addressController, macAddressController, httpEndpointController, (location) => setState(() => currentLocation = location), (type) => setState(() => currentEndpointType = type)),
               Padding(padding: const EdgeInsets.only(top: 10),
-                  child: TextButton(
-                      onPressed: _addEndpoint, child: const Text("Add info")))
+                  child: TextButton(onPressed: _saveEndpoint, child: const Text("Save info")))
             ],
           ),
         ),
@@ -54,33 +53,23 @@ class AddEndpointScreenState extends State<AddEndpointScreen> {
     );
   }
 
-  void _addEndpoint() {
-    if(nameController.text.isEmpty) {
-      const snackBar = SnackBar(content: Text(
-          "Please enter a valid name"));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      return;
-    }
-    if (!widget.endpoints.any((element) => element.name == nameController.text)) {
-      var endpoint = Endpoint(currentLocation, nameController.text, currentEndpointType);
-      // TODO: Validate that location is correct
-      widget.callback(endpoint);
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = widget.endpoint.name;
+    addressController.text = "No data";
+    macAddressController.text = "No data";
+    httpEndpointController.text = "No data";
+    currentEndpointType = widget.endpoint.type;
+    currentLocation = widget.endpoint.location;
+  }
 
-      Navigator.pop(context);
-
-      // Clear input fields
-      nameController.clear();
-
-      addressController.clear();
-      macAddressController.clear();
-
-      httpEndpointController.clear();
-      return;
-    }
-
-    const snackBar = SnackBar(content: Text(
-        "There is already a info with the same name"));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  void _saveEndpoint() {
+    widget.endpoint.name = nameController.text;
+    widget.endpoint.location = currentLocation;
+    widget.endpoint.type = currentEndpointType;
+    widget.saveCallback();
+    Navigator.pop(context);
   }
 
 }

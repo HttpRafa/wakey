@@ -4,9 +4,9 @@ import 'package:wakey/endpoint/location.dart';
 class LocationTile extends StatelessWidget {
 
   final Location location;
-  final Function() callback;
+  final Function(Location) editClicked;
 
-  const LocationTile(this.location, this.callback, {super.key});
+  const LocationTile(this.location, this.editClicked, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class LocationTile extends StatelessWidget {
       ),
       subtitle: Text(location.address),
       trailing: ElevatedButton(
-        onPressed: callback,
+        onPressed: () => editClicked(location),
         child: const Icon(
           Icons.edit,
           color: Colors.green

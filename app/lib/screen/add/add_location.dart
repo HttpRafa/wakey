@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wakey/endpoint/location.dart';
+import 'package:wakey/screen/info/location_info.dart';
 import 'package:wakey/widget/app_bar.dart';
 
 class AddLocationScreen extends StatelessWidget {
@@ -24,23 +25,7 @@ class AddLocationScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Padding(padding: EdgeInsets.only(top: 25),
-                  child: Text("Location information")),
-              Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
-                decoration: const InputDecoration(hintText: "Name"),
-                controller: nameController,
-              )),
-              const Padding(padding: EdgeInsets.only(top: 25),
-                  child: Text("Server information")),
-              Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
-                decoration: const InputDecoration(hintText: "Address"),
-                controller: addressController,
-              )),
-              Padding(padding: const EdgeInsets.only(top: 5), child: TextField(
-                decoration: const InputDecoration(hintText: "Token"),
-                controller: tokenController,
-                obscureText: true,
-              )),
+              LocationInfo(nameController, addressController, tokenController),
               Padding(padding: const EdgeInsets.only(top: 10),
                   child: TextButton(onPressed: () => _addLocation(context), child: const Text("Add location")))
             ],
@@ -58,7 +43,7 @@ class AddLocationScreen extends StatelessWidget {
       return;
     }
     if (!locations.any((element) => element.name == nameController.text)) {
-      Location location = Location(const Uuid().v4(), nameController.text, addressController.text, tokenController.text);
+      var location = Location(const Uuid().v4(), nameController.text, addressController.text, tokenController.text);
       // TODO: Validate that location is correct
       callback(location);
 

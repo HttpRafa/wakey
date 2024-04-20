@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wakey/endpoint/location.dart';
 import 'package:wakey/screen/add/add_location.dart';
+import 'package:wakey/screen/edit/edit_location.dart';
 import 'package:wakey/storage/app_storage.dart';
 import 'package:wakey/widget/app_bar.dart';
 import 'package:wakey/widget/list/location_list_item.dart';
@@ -27,9 +28,7 @@ class LocationsScreenState extends State<LocationsScreen> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           children: [
             for(int i = 0; i < locations.length; i++)
-              LocationTile(locations[i], () {
-                // If edit button is pressed
-              })
+              LocationTile(locations[i], _editLocation)
           ],
         ),
       ),
@@ -43,8 +42,25 @@ class LocationsScreenState extends State<LocationsScreen> {
     locations = AppStorage.pullLocations();
   }
 
+  void _editLocation(Location location) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EditLocationScreen(location, () {
+      // Save location
+      AppStorage.writeLocations(locations);
+
+      // Update existing endpoints
+      var endpoints = AppStorage.pullEndpoints();
+      for (var element in endpoints) {
+        if(element.location.identifier == location.identifier) {
+          element.location = location;
+        }
+      }
+      AppStorage.writeEndpoints(endpoints);
+      setState(() {});
+    })));
+  }
+  
   void _addLocation() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddLocationScreen(locations, (location) => setState(() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AddLocationScreen(locations, (location) => setState(() {
       locations.add(location);
       AppStorage.writeLocations(locations);
     }))));
